@@ -1,0 +1,40 @@
+services:
+  #nginx
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+  
+  #PHP
+  app:
+    build:
+      dockerfile: ./php/Dockerfile
+    volumes:
+      - ./app:/var/www/html
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+  
+  #MySql
+  db:
+    image: mariadb:10.9
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: docker-db
+
+  # Redis
+
+volumes:
+  mysqldata:
