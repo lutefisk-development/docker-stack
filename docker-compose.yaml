@@ -13,3 +13,22 @@ services:
       dockerfile: ./php/Dockerfile
     volumes:
       - ./app:/app
+  
+  #MySql
+  db:
+    image: mariadb:10.9
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: docker-db
+
+  # Redis
+
+volumes:
+  mysqldata:
